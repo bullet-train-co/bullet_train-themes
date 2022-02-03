@@ -1,3 +1,5 @@
+require "rails"
+
 require_relative "../../theme_partials"
 
 module BulletTrain

@@ -1,0 +1,8 @@
+Description:
+  Install required configuration
+
+Example:
+    rails generate bullet_train:themes:install
+
+    This will:
+        create bin/open-theme-partial

@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+
+require "bullet_train/themes"
+require "bullet_train/themes/partial"
+
+BulletTrain::Themes::Partial.new(ARGV).open
