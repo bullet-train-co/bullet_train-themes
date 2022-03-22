@@ -18,10 +18,7 @@ namespace :bullet_train do
           next unless literal_partial_path.match(/^#{pattern}/)
 
           partial_without_hierarchy_base = remove_hierarchy_base(literal_partial_path, pattern)
-
-          # shared/fields are framework-agnostic, so we always pull them from the base directory.
-          hierarchy_base = literal_partial_path.match(/^shared\/fields/) ? "base" : args[:theme]
-          resolved_partial = get_full_debased_file_path(partial_without_hierarchy_base, hierarchy_base)
+          resolved_partial = get_full_debased_file_path(partial_without_hierarchy_base, args[:theme])
 
           bullet_train_gems = []
           File.open("#{Rails.root}/Gemfile.lock") do |file|
