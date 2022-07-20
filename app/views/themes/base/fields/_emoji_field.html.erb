@@ -1,4 +1,3 @@
-<%# TODO this goes in themes gem %>
 <% yield %>
 
 <%
@@ -24,7 +23,7 @@ value = form.object.send(method)
       &nbsp;
       Choose an Emoji
       <% end %>
-      <%= form.hidden_field method, data: {target: "#{stimulus_controller}.input"} %>
+      <%= form.hidden_field method, data: {"#{stimulus_controller}-target": "input"} %>
     </div>
 
   <% end %>
