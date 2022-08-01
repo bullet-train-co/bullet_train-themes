@@ -7,6 +7,8 @@ module BulletTrain
     mattr_accessor :themes, default: {}
     mattr_accessor :logo_height, default: 54
 
+    mattr_reader :partial_paths, default: {}
+
     module Base
       class Theme
         def directory_order

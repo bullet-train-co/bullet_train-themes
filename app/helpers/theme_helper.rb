@@ -15,15 +15,12 @@ module ThemeHelper
   def render(options = {}, locals = {}, &block)
     # The theme engine only supports `<%= render 'shared/box' ... %>` style calls to `render`.
     if options.is_a?(String)
-      # Initialize a global variable that will cache all resolutions of a given path for the entire life of the server.
-      $resolved_theme_partial_paths ||= {}
-
       # Check whether we've already resolved this partial to render from another path before.
       # If we've already resolved this partial from a different path before, then let's just skip to that.
       # TODO This should be disabled in development so new templates are taken into account without restarting the server.
-      if $resolved_theme_partial_paths[options]
+      if BulletTrain::Themes.partial_paths[options]
         # Override the value in place. This will be respected when we call `super` below.
-        options = $resolved_theme_partial_paths[options]
+        options = BulletTrain::Themes.partial_paths[options]
       end
     end
 
@@ -60,7 +57,7 @@ module ThemeHelper
             body = super
 
             # 🏆 If we get this far, then we've found the actual path of the theme partial. We should cache it!
-            $resolved_theme_partial_paths[original_options] = options
+            BulletTrain::Themes.partial_paths[original_options] = options
 
             # We also need to return whatever the rendered body was.
             return body
