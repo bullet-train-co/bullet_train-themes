@@ -29,6 +29,11 @@ module BulletTrain
         def directory_order
           ["base"]
         end
+
+        def partial_paths_for(path)
+          # TODO directory_order should probably come from the `Current` model.
+          directory_order.map { "themes/#{_1}/#{path}" }
+        end
       end
     end
   end

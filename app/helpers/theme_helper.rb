@@ -25,10 +25,9 @@ module ThemeHelper
     if requested_partial = BulletTrain::Themes.possible_theme_render_path(options)
       original_options = options
 
-      # TODO We're hard-coding this for now, but this should probably come from the `Current` model.
-      current_theme_object.directory_order.each do |theme_path|
-        # Update our options from something like `shared/box` to `themes/light/box`.
-        options = "themes/#{theme_path}/#{requested_partial}"
+      paths = current_theme_object.partial_paths_for(requested_partial)
+      paths.each do |theme_path|
+        options = theme_path
 
         # Try rendering the partial again with the updated options.
         body = super
