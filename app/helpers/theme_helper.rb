@@ -22,9 +22,7 @@ module ThemeHelper
     # perform the appropriate magic to figure out where amongst the themes the partial should be rendering from.
     super
   rescue ActionView::MissingTemplate
-    # Does the requested partial path match one of the invocation regexes?
     if requested_partial = BulletTrain::Themes.possible_theme_render_path(options)
-      # Keep track of the original options.
       original_options = options
 
       # TODO We're hard-coding this for now, but this should probably come from the `Current` model.
