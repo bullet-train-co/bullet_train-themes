@@ -30,7 +30,7 @@ module ThemeHelper
     # However, if one of those two situations isn't true, then this call here will throw an exception and we can
     # perform the appropriate magic to figure out where amongst the themes the partial should be rendering from.
     super
-  rescue ActionView::MissingTemplate => exception
+  rescue ActionView::MissingTemplate
     # Does the requested partial path match one of the invocation regexes?
     if (invocation_pattern = INVOCATION_PATTERNS.detect { |regex| options.match?(regex) })
       # Keep track of the original options.
@@ -56,12 +56,12 @@ module ThemeHelper
       # If calling `render` with the updated options is still resulting in a missing template, we need to
       # keep iterating over `directory_order` to work our way up the theme stack and see if we can find the
       # partial there, e.g. going from `light` to `tailwind` to `base`.
-      rescue ActionView::MissingTemplate => _
+      rescue ActionView::MissingTemplate
         next
       end
     end
 
     # If we weren't able to find the partial in some theme-based place, then just let the original error bubble up.
-    raise exception
+    raise
   end
 end
