@@ -15,13 +15,8 @@ module ThemeHelper
   def render(options = {}, locals = {}, &block)
     # The theme engine only supports `<%= render 'shared/box' ... %>` style calls to `render`.
     if options.is_a?(String)
-      # Check whether we've already resolved this partial to render from another path before.
-      # If we've already resolved this partial from a different path before, then let's just skip to that.
-      # TODO This should be disabled in development so new templates are taken into account without restarting the server.
-      if BulletTrain::Themes.partial_paths[options]
-        # Override the value in place. This will be respected when we call `super` below.
-        options = BulletTrain::Themes.partial_paths[options]
-      end
+      # TODO This caching should be disabled in development so new templates are taken into account without restarting the server.
+      options = BulletTrain::Themes.partial_paths[options] || options
     end
 
     begin
