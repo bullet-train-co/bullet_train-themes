@@ -9,6 +9,21 @@ module BulletTrain
 
     mattr_reader :partial_paths, default: {}
 
+    # TODO Do we want this to be configurable by downstream applications?
+    INVOCATION_PATTERNS = [
+      # ❌ This path is included for legacy purposes, but you shouldn't reference partials like this in new code.
+      /^account\/shared\//,
+
+      # ✅ This is the correct path to generically reference theme component partials with.
+      /^shared\//,
+    ]
+
+    def self.possible_theme_render_path(partial_path)
+      if pattern = INVOCATION_PATTERNS.find { _1.match? partial_path }
+        partial_path.remove(pattern)
+      end
+    end
+
     module Base
       class Theme
         def directory_order

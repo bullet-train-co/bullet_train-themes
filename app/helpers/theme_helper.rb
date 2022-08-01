@@ -1,13 +1,4 @@
 module ThemeHelper
-  # TODO Do we want this to be configurable by downstream applications?
-  INVOCATION_PATTERNS = [
-    # ❌ This path is included for legacy purposes, but you shouldn't reference partials like this in new code.
-    /^account\/shared\//,
-
-    # ✅ This is the correct path to generically reference theme component partials with.
-    /^shared\//,
-  ]
-
   def current_theme_object
     @current_theme_object ||= "BulletTrain::Themes::#{current_theme.to_s.classify}::Theme".constantize.new
   end
@@ -32,12 +23,9 @@ module ThemeHelper
     super
   rescue ActionView::MissingTemplate
     # Does the requested partial path match one of the invocation regexes?
-    if (invocation_pattern = INVOCATION_PATTERNS.detect { |regex| options.match?(regex) })
+    if requested_partial = BulletTrain::Themes.possible_theme_render_path(options)
       # Keep track of the original options.
       original_options = options
-
-      # Trim out the base part of the requested partial.
-      requested_partial = options.gsub(invocation_pattern, "")
 
       # TODO We're hard-coding this for now, but this should probably come from the `Current` model.
       current_theme_object.directory_order.each do |theme_path|
