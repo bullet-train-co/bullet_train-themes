@@ -18,6 +18,11 @@ module BulletTrain
       /^shared\//,
     ]
 
+    def self.resolved_partial_path_for(path)
+      # TODO This caching should be disabled in development so new templates are taken into account without restarting the server.
+      partial_paths[path]
+    end
+
     def self.theme_invocation_path_for(path)
       # Themes only support `<%= render 'shared/box' ... %>` style calls to `render`, so check `path` is a string first.
       if path.is_a?(String) && (pattern = INVOCATION_PATTERNS.find { _1.match? path })

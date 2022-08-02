@@ -4,11 +4,7 @@ module ThemeHelper
   end
 
   def render(options = {}, locals = {}, &block)
-    # The theme engine only supports `<%= render 'shared/box' ... %>` style calls to `render`.
-    return super unless options.is_a?(String)
-
-    # TODO This caching should be disabled in development so new templates are taken into account without restarting the server.
-    options = BulletTrain::Themes.partial_paths[options] || options
+    options = BulletTrain::Themes.resolved_partial_path_for(options) || options
 
     # This is where we try to just lean on Rails default behavior. If someone renders `shared/box` and also has a
     # `app/views/shared/_box.html.erb`, then no error will be thrown and we will have never interfered in the normal
