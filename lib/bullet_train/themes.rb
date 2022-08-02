@@ -19,8 +19,9 @@ module BulletTrain
     ]
 
     def self.theme_invocation_path_for(path)
-      if pattern = INVOCATION_PATTERNS.find { _1.match? partial_path }
-        partial_path.remove(pattern)
+      # Themes only support `<%= render 'shared/box' ... %>` style calls to `render`, so check `path` is a string first.
+      if path.is_a?(String) && (pattern = INVOCATION_PATTERNS.find { _1.match? path })
+        path.remove(pattern)
       end
     end
 
