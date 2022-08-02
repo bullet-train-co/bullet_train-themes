@@ -22,12 +22,12 @@ module ThemeHelper
     # perform the appropriate magic to figure out where amongst the themes the partial should be rendering from.
     super
   rescue ActionView::MissingTemplate
-    if requested_partial = BulletTrain::Themes.possible_theme_render_path(options)
+    if theme_path = BulletTrain::Themes.theme_invocation_path_for(options)
       original_options = options
 
-      paths = current_theme_object.partial_paths_for(requested_partial)
-      paths.each do |theme_path|
-        options = theme_path
+      paths = current_theme_object.partial_paths_for(theme_path)
+      paths.each do |resolved_theme_path|
+        options = resolved_theme_path
 
         # Try rendering the partial again with the updated options.
         body = super

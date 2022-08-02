@@ -18,7 +18,7 @@ module BulletTrain
       /^shared\//,
     ]
 
-    def self.possible_theme_render_path(partial_path)
+    def self.theme_invocation_path_for(path)
       if pattern = INVOCATION_PATTERNS.find { _1.match? partial_path }
         partial_path.remove(pattern)
       end
