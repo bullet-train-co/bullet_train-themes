@@ -18,7 +18,7 @@ module ThemeHelper
     # perform the appropriate magic to figure out where amongst the themes the partial should be rendering from.
     super
   rescue ActionView::MissingTemplate
-    current_theme_object.partial_paths_for(options)&.each do |resolved_theme_path|
+    current_theme_object.each_potential_partial_path_for(options) do |resolved_theme_path|
       body = super(resolved_theme_path, locals, &block)
 
       # 🏆 If we get this far, then we've found the actual path of the theme partial. We should cache it!
