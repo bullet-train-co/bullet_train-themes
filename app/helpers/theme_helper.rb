@@ -18,23 +18,20 @@ module ThemeHelper
     # perform the appropriate magic to figure out where amongst the themes the partial should be rendering from.
     super
   rescue ActionView::MissingTemplate
-    if theme_path = BulletTrain::Themes.theme_invocation_path_for(options)
-      paths = current_theme_object.partial_paths_for(theme_path)
-      paths.each do |resolved_theme_path|
-        body = super(resolved_theme_path, locals, &block)
+    current_theme_object.partial_paths_for(options)&.each do |resolved_theme_path|
+      body = super(resolved_theme_path, locals, &block)
 
-        # 🏆 If we get this far, then we've found the actual path of the theme partial. We should cache it!
-        BulletTrain::Themes.partial_paths[options] = resolved_theme_path
+      # 🏆 If we get this far, then we've found the actual path of the theme partial. We should cache it!
+      BulletTrain::Themes.partial_paths[options] = resolved_theme_path
 
-        # We also need to return whatever the rendered body was.
-        return body
+      # We also need to return whatever the rendered body was.
+      return body
 
-      # If calling `render` with the updated options is still resulting in a missing template, we need to
-      # keep iterating over `directory_order` to work our way up the theme stack and see if we can find the
-      # partial there, e.g. going from `light` to `tailwind` to `base`.
-      rescue ActionView::MissingTemplate
-        next
-      end
+    # If calling `render` with the updated options is still resulting in a missing template, we need to
+    # keep iterating over `directory_order` to work our way up the theme stack and see if we can find the
+    # partial there, e.g. going from `light` to `tailwind` to `base`.
+    rescue ActionView::MissingTemplate
+      next
     end
 
     # If we weren't able to find the partial in some theme-based place, then just let the original error bubble up.
