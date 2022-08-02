@@ -19,17 +19,12 @@ module ThemeHelper
     super
   rescue ActionView::MissingTemplate
     if theme_path = BulletTrain::Themes.theme_invocation_path_for(options)
-      original_options = options
-
       paths = current_theme_object.partial_paths_for(theme_path)
       paths.each do |resolved_theme_path|
-        options = resolved_theme_path
-
-        # Try rendering the partial again with the updated options.
-        body = super
+        body = super(resolved_theme_path, locals, &block)
 
         # 🏆 If we get this far, then we've found the actual path of the theme partial. We should cache it!
-        BulletTrain::Themes.partial_paths[original_options] = options
+        BulletTrain::Themes.partial_paths[options] = resolved_theme_path
 
         # We also need to return whatever the rendered body was.
         return body
