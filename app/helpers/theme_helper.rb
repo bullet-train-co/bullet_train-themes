@@ -4,7 +4,7 @@ module ThemeHelper
   end
 
   def render(options = {}, locals = {}, &block)
-    options = BulletTrain::Themes.resolved_partial_path_for(options) || options
+    options = current_theme_object.resolved_partial_path_for(@lookup_context, options, locals) || options
 
     # This is where we try to just lean on Rails default behavior. If someone renders `shared/box` and also has a
     # `app/views/shared/_box.html.erb`, then no error will be thrown and we will have never interfered in the normal
@@ -16,9 +16,6 @@ module ThemeHelper
     #
     # However, if one of those two situations isn't true, then this call here will throw an exception and we can
     # perform the appropriate magic to figure out where amongst the themes the partial should be rendering from.
-    super
-  rescue ActionView::MissingTemplate
-    options = current_theme_object.resolve_partial_path_from(@lookup_context, options, locals) || raise
     super
   end
 end
