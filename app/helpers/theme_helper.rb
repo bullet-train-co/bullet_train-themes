@@ -19,9 +19,7 @@ module ThemeHelper
     super
   rescue ActionView::MissingTemplate
     body = current_theme_object.find_potential_partial_path_for(options) do |resolved_theme_path|
-      super(resolved_theme_path, locals, &block).tap do
-        BulletTrain::Themes.partial_paths[options] = resolved_theme_path
-      end
+      super(resolved_theme_path, locals, &block)
     # If calling `render` with the updated options is still resulting in a missing template, we need to
     # keep iterating over `directory_order` to work our way up the theme stack and see if we can find the
     # partial there, e.g. going from `light` to `tailwind` to `base`.

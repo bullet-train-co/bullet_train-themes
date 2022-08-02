@@ -39,7 +39,11 @@ module BulletTrain
         def find_potential_partial_path_for(path, &block)
           # TODO directory_order should probably come from the `Current` model.
           if theme_path = BulletTrain::Themes.theme_invocation_path_for(path)
-            directory_order.map { "themes/#{_1}/#{theme_path}" }.find(&block)
+            directory_order.map { "themes/#{_1}/#{theme_path}" }.find do |resolved_theme_path|
+              yield(resolved_theme_path)&.tap do
+                BulletTrain::Themes.partial_paths[path] = resolved_theme_path
+              end
+            end
           end
         end
       end
