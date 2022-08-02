@@ -36,13 +36,11 @@ module BulletTrain
           ["base"]
         end
 
-        def find_potential_partial_path_for(path, &block)
-          # TODO directory_order should probably come from the `Current` model.
+        def resolve_partial_path_from(lookup_context, path, locals)
           if theme_path = BulletTrain::Themes.theme_invocation_path_for(path)
-            directory_order.map { "themes/#{_1}/#{theme_path}" }.find do |resolved_theme_path|
-              yield(resolved_theme_path)&.tap do
-                BulletTrain::Themes.partial_paths[path] = resolved_theme_path
-              end
+            # TODO directory_order should probably come from the `Current` model.
+            if partial = lookup_context.find_all(theme_path, directory_order.map { "themes/#{_1}" }, true, locals.keys).first
+              BulletTrain::Themes.partial_paths[path] = partial.virtual_path.gsub("/_", "/")
             end
           end
         end

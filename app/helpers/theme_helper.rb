@@ -18,16 +18,7 @@ module ThemeHelper
     # perform the appropriate magic to figure out where amongst the themes the partial should be rendering from.
     super
   rescue ActionView::MissingTemplate
-    body = current_theme_object.find_potential_partial_path_for(options) do |resolved_theme_path|
-      if @lookup_context.find_all(resolved_theme_path, [], true, locals.keys).any?
-        super(resolved_theme_path, locals, &block)
-      end
-    # If calling `render` with the updated options is still resulting in a missing template, we need to
-    # keep iterating over `directory_order` to work our way up the theme stack and see if we can find the
-    # partial there, e.g. going from `light` to `tailwind` to `base`.
-    end
-
-    # If we weren't able to find the partial in some theme-based place, then just let the original error bubble up.
-    body || raise
+    options = current_theme_object.resolve_partial_path_from(@lookup_context, options, locals) || raise
+    super
   end
 end
