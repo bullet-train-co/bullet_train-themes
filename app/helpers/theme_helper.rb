@@ -29,7 +29,7 @@ module ActionView
 
         resolver.find(name, prefixes, partial, details, details_key, keys)
       end
-      alias :find_template :find
+      alias_method :find_template, :find
     end
   end
 end
