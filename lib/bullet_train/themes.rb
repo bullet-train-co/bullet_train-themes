@@ -35,8 +35,7 @@ module BulletTrain
           # TODO This caching should be disabled in development so new templates are taken into account without restarting the server.
           BulletTrain::Themes.partial_paths.fetch(path) do
             if (theme_path = BulletTrain::Themes.theme_invocation_path_for(path))
-              # TODO directory_order should probably come from the `Current` model.
-              if (partial = lookup_context.find_all(theme_path, directory_order.map { "themes/#{_1}" }, true, locals.keys).first)
+              if (partial = lookup_context.find_all(theme_path, Current.directory_order.map { "themes/#{_1}" }, true, locals.keys).first)
                 BulletTrain::Themes.partial_paths[path] = partial.virtual_path.gsub("/_", "/")
               end
             end
