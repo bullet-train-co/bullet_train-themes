@@ -2,7 +2,7 @@ module BulletTrain
   module Themes
     module Application
       def self.install_theme(theme_name)
-        unless theme_name == "light" || Dir.exists?("app/views/themes/#{theme_name}")
+        unless theme_name == "light" || Dir.exist?("app/views/themes/#{theme_name}")
           raise "We could not find '#{theme_name}'. Please eject Bullet Train's standard views to your main application first by using `rake bullet_train:themes:light:eject[custom_theme_name_here]`".red
         end
 
