@@ -1,4 +1,4 @@
-require "tasks/application"
+require_relative "../application"
 
 namespace :bullet_train do
   namespace :themes do
